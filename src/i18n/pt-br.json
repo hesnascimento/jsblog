@@ -1,4 +1,7 @@
 {
+    "Confirmation code not sent!": "Código de confirmação não enviado!",
+    "Internal server error.": "Erro interno no servidor",
     "Invalid user!": "Usuário inválido!",
+    "Not found.": "Não encontrado.",
     "User not sent!": "Usuário não enviado!"
 }
