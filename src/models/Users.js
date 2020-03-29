@@ -5,6 +5,7 @@ module.exports = (sequelize, DataType) => {
     confirmed: DataType.BOOLEAN,
     confirmationCode: DataType.STRING,
     confirmationDate: DataType.DATE,
+    creationDate: DataType.DATE,
     displayName: DataType.STRING,
     password: DataType.STRING,
     email: DataType.STRING,
