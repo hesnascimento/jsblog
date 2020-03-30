@@ -1,7 +1,11 @@
 {
     "Confirmation code not sent!": "Código de confirmação não enviado!",
+    "Email and Password must not be null.": "Email e Senha não devem ser nulos.",
     "Internal server error.": "Erro interno no servidor",
+    "Invalid password.": "Senha inválida.",
     "Invalid user!": "Usuário inválido!",
     "Not found.": "Não encontrado.",
+    "This user is in recovery, please check your email to reset you password.": "Este usuário está em recuperação, por favor confira seu email para resetar sua senha.",
+    "User not found.": "Usuário não encontrado.",
     "User not sent!": "Usuário não enviado!"
 }
