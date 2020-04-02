@@ -1,6 +1,9 @@
 module.exports = (sequelize, DataType) => {
   const Users = sequelize.define('Users', {
-    id: DataType.INTEGER,
+    id: {
+      type: DataType.INTEGER,
+      primaryKey: true
+    },
     disabled: DataType.BOOLEAN,
     confirmed: DataType.BOOLEAN,
     confirmationCode: DataType.STRING,
@@ -15,6 +18,8 @@ module.exports = (sequelize, DataType) => {
     recoveryDate: DataType.DATE,
     lastLogin: DataType.DATE,
     profileImage: DataType.STRING
+  }, {
+    timestamps: false
   })
 
   return Users

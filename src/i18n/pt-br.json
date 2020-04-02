@@ -1,11 +1,17 @@
 {
+    "Account blocked, a recovery code was sent to your email.": "Conta bloquead, um código de recuperação foi enviado para seu email.",
     "Confirmation code not sent!": "Código de confirmação não enviado!",
     "Email and Password must not be null.": "Email e Senha não devem ser nulos.",
+    "Email is not valid.": "Email não é valido.",
+    "Email must not be null.": "Email não pode ser nulo.",
     "Internal server error.": "Erro interno no servidor",
     "Invalid password.": "Senha inválida.",
+    "Invalid token.": "Token inválido.",
     "Invalid user!": "Usuário inválido!",
     "Not found.": "Não encontrado.",
+    "There is a pending recovery process.": "Já exite um processo de recuperação pendente.",
     "This user is in recovery, please check your email to reset you password.": "Este usuário está em recuperação, por favor confira seu email para resetar sua senha.",
+    "Token not sent.": "Token não enviado.",
     "User not found.": "Usuário não encontrado.",
     "User not sent!": "Usuário não enviado!"
 }

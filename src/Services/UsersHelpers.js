@@ -1,29 +1,23 @@
-const isUserValid = user => {
-  if (!user.displayName || !user.password || !user.email)
-    return false
+const isUserValid = user => (
+    user
+    && user.displayName
+    && user.password
+    && user.email
+    && user.password.lenght >= 6
+    && isEmailValid(user.email)
+  )
 
-  if (user.password.lenght <= 6)
-    return false
+const generateRandomString = len => ' '
+  .repeat(len)
+  .split('')
+  .map(() => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'[Math.round(Math.random() * 62)])
+  .join('')
 
-  // TODO: Validate email
+const isEmailValid = email => (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
 
-  return true
-}
-
-const generateConfirmationCode = len => {
-  const range = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
-
-  let code = ''
-
-  for (let i = 0; i < len; i++) {
-    const selector = Math.round(Math.random() * (range.length - 1))
-    code += range[selector]
-  }
-
-  return code
-}
 
 module.exports = {
   isUserValid,
-  generateConfirmationCode
+  isEmailValid,
+  generateRandomString,
 }

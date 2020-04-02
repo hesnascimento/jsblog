@@ -8,7 +8,11 @@ const init = language => {
   const translate = (message, values) => {
     const translated = translateObject[message] || message
 
-    return util.format(translated, ...values)
+    return values ? util.format(translated, ...values) : translated
+  }
+
+  return {
+    translate
   }
 }
 

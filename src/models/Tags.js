@@ -3,10 +3,12 @@ module.exports = (sequelize, DataType) => {
     tag: DataType.STRING,
     enabled: DataType.STRING,
     creationDate : DataType.DATE
+  }, {
+    timestamps: false
   })
 
   Tags.associate = model => {
-    Tags.belongsToMay(model.Articles, { through: 'Article_Tags', foreignKey: 'tag', as: 'articles' })
+    Tags.belongsToMany(model.Articles, { through: 'Article_Tags', foreignKey: 'tag', as: 'articles' })
   }
 
   return Tags

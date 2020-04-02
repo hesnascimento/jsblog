@@ -1,5 +1,5 @@
 module.exports = {
-  "development": {
+  "DEV": {
     "username": "jsblog",
     "password": "jsblog",
     "database": "jsblog",

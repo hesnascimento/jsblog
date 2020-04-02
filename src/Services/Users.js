@@ -1,9 +1,11 @@
 const crypto = require('crypto')
+const fs = require('fs')
 const jwt = require('jsonwebtoken')
+const moment = require('moment')
 
 const { Users } = require('../models')
-const UserHelpers = require('./UsersHelpers')
 const ServiceError = require('./ServiceError')
+const UserHelpers = require('./UsersHelpers')
 
 const register = async user => {
   if (!user)
@@ -12,7 +14,7 @@ const register = async user => {
   if (!UserHelpers.isUserValid(user))
     throw new ServiceError(400, 'Invalid user!')
 
-  const { SALT, CONFIRMATION_CODE_LENGTH } = process.env
+  const SALT = UserHelpers.generateRandomString(16)
 
   const hashedPassword = crypto
     .createHash('md5')
@@ -23,8 +25,8 @@ const register = async user => {
     ...user,
     disabled: false,
     confirmed: false,
-    confirmationCode: UserHelpers.generateConfirmationCode(CONFIRMATION_CODE_LENGTH), //TODO: Generate Confirmation Code
-    password: hashedPassword,
+    confirmationCode: UserHelpers.generateRandomString(32), //TODO: Send mail
+    password: `${hashedPassword}::${SALT}`,
     creationDate: new Date()
   }
 
@@ -40,7 +42,7 @@ const register = async user => {
       'ERROR =>',
       error)
 
-      throw new ServiceError(500, 'Internal server error.')
+    throw new ServiceError(500, 'Internal server error.')
   }
 }
 
@@ -80,7 +82,7 @@ const confirmAccount = async code => {
       'ERROR =>',
       error)
 
-      throw new ServiceError(500, 'Internal server error.')
+    throw new ServiceError(500, 'Internal server error.')
   }
 }
 
@@ -88,30 +90,39 @@ const login = async (email, password) => {
   if (!email || !password)
     throw new ServiceError(400, 'Email and Password must not be null.')
 
-  // TODO: Validate email
+  if(!UserHelpers.isEmailValid(email))
+    throw new ServiceError(400, 'Email is not valid.')
 
   try {
-    const user = Users.findOne({ email, disabled: false, confirmed: true })
+    const user = await Users.findOne({
+      where: {
+        email,
+        disabled: false,
+        confirmed: true
+      }
+    })
 
     if (!user)
       throw new ServiceError(401, 'User not found.')
 
-    const { SALT } = process.env
+    if (user.recovery === true)
+      throw new ServiceError(401, 'This user is in recovery, please check your email to reset you password.')
+
+    const [dbPassword, SALT] = user.password.split('::')
 
     const saltedPassword = crypto
       .createHash('md5')
       .update(`${password}::${SALT}`)
       .digest('hex')
 
-    if (user.recovery === true)
-      throw new ServiceError(401, 'This user is in recovery, please check your email to reset you password.')
-
-    if (saltedPassword !== user.password) {
+    if (saltedPassword !== dbPassword) {
       const toDb = {}
 
       if (user.passwordTries === 2) {
         toDb.passwordTries = 0
-        // TODO: Call recovery function
+        await sendRecovery(user.email)
+
+        throw new ServiceError(401, 'Account blocked, a recovery code was sent to your email.')
       }
 
       toDb.passwordTries = user.passwordTries + 1
@@ -128,16 +139,84 @@ const login = async (email, password) => {
 
     await Users.update({ id: user.id }, toDb)
 
-    // TODO: Add private/public key for sign an validate token
+    const privateKey = fs.readFileSync(`./keys/blog_rsa`)
 
-    return jwt.sign({ id: user.id }, 'secret')
+    return jwt.sign({ id: user.id }, privateKey, {
+      algorithm: 'RS256',
+      expiresIn: '2h'
+    })
   } catch (error) {
+    console.error(
+      'REQUEST =>',
+      email,
+      'ERROR =>',
+      error)
 
+    if(error.code) {
+      throw error
+    }
+
+    throw new ServiceError(500, 'Internal server error.')
   }
+}
+
+const getUserByToken = async token => {
+  if (!token)
+    throw new ServiceError(401, 'Token not sent.')
+
+  const key = fs.readFileSync('./keys/blog_rsa.pem')
+
+  try {
+    const data = jwt.verify(token, key, { algorithms: ['RS256']})
+    const user = await Users.findOne({ id: data.user })
+
+    if (!user)
+    throw new ServiceError(401, 'Invalid token.')
+
+    return user
+  } catch (error) {
+    console.error(
+      'REQUEST =>',
+      token,
+      'ERROR =>',
+      error)
+
+    throw new ServiceError(401, 'Invalid token.')
+  }
+}
+
+const sendRecovery = async email => {
+  if (!email)
+    throw new ServiceError(400, 'Email must not be null.')
+
+  if(!UserHelpers.isEmailValid(email))
+    throw new ServiceError(400, 'Email is not valid.')
+
+  const user = await Users.findOne({ email, disabled: false })
+
+  if (!user)
+    throw new ServiceError(400, 'User not found.')
+
+  if (user.recovery && moment(user.recoveryDate).diff(new Date, 'hours') <= 24)
+    throw new ServiceError(400, 'There is a pending recovery process.')
+
+  const recoveryCode = UserHelpers.generateRandomString(32)
+
+  await Users.update({ id: user.id }, {
+    recovery: recoveryCode,
+    recoveryTries: 0,
+    recoveryDate: new Date()
+  })
+
+  // TODO: Send recovery mail
+
+  return true
 }
 
 module.exports = {
   register,
   confirmAccount,
-  login
+  login,
+  getUserByToken,
+  sendRecovery
 }
