@@ -1,0 +1,43 @@
+h1.title {
+    background-color: var(--header-bg);
+    color: var(--text-secondary);
+    height: 4rem;
+    padding-left: 2rem;
+    padding-top: 1rem;
+    vertical-align: middle;
+    font-weight: 400;
+}
+
+h1.title > small > a.breadcrumb {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+h1.title > small > a.breadcrumb:hover {
+    color: var(--text-secondary);
+}
+
+
+h1.title small {
+    font-size: 1rem;
+    font-weight: 200;
+}
+
+h1.title .title-button {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    float: right;
+    text-decoration: none;
+    border-radius: 2rem;
+    margin-right: 2rem;
+    padding: 1rem 2rem;
+    margin-top: -2.5rem;
+    font-size: 1rem;
+    font-weight: 200;
+    transition: var(--transition-speed);
+}
+
+h1.title .title-button:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+}

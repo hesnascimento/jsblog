@@ -12,6 +12,7 @@
     "There is a pending recovery process.": "Já exite um processo de recuperação pendente.",
     "This user is in recovery, please check your email to reset you password.": "Este usuário está em recuperação, por favor confira seu email para resetar sua senha.",
     "Token not sent.": "Token não enviado.",
+    "User already exists.": "Usuário já existe.",
     "User not found.": "Usuário não encontrado.",
     "User not sent!": "Usuário não enviado!"
 }

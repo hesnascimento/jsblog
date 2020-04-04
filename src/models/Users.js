@@ -2,7 +2,8 @@ module.exports = (sequelize, DataType) => {
   const Users = sequelize.define('Users', {
     id: {
       type: DataType.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     disabled: DataType.BOOLEAN,
     confirmed: DataType.BOOLEAN,

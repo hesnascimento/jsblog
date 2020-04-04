@@ -1,0 +1,45 @@
+<head>
+    <link rel="stylesheet" href="/stylesheet/admin.css" />
+    <title>JSBlog - Authors</title>
+</head>
+
+<body>
+    <%- include("theme/sidebar"); %>
+    <main>
+        <%- include("theme/title", {
+            title: "Authors",
+            action: {
+                link: "/admin/authors/new",
+                label: "New Author"
+            },
+            breadcrumbs: [
+                { link: '/admin', label: 'Admin'},
+                { link: '#', label: 'Authors' }
+            ]
+        }); %>
+        <p>
+            <table class="data-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Display Name</th>
+                    <th>Email</th>
+                    <th>Disabled</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.id %></td>
+                            <td><img src="<%= user.profileImage %>" class="user-image" /></td>
+                            <td><%= user.displayName %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.disabled ? 'Yes' : 'No' %></td>
+                            <td><a href="/admin/authors/<%= user.id %>/edit" class="action">Edit</a></td>
+                        </tr>
+                    <%})%>
+                </tbody>
+            </table>
+        </p>
+    </main>
+</body>

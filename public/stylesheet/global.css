@@ -1,5 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,400,800&display=swap');
 
-html {
+:root {
+    font-size: 16px;
     font-family: 'Roboto' !important;
+    --bg-default: #2E2E3B;
+
+    --text-primary: #b6b6b6;
+    --text-secondary: #ececec;
+    --bg-primary: #23232e;
+    --bg-secondary: #141418;
+    --detail-primary: #47B2F1;
+
+    --header-bg: #282833;
+
+
+    --table-header: #282833;
+    --table-header-text: #FEFEFE;
+    --table-strips: #b6b6b6;
+    --table-strips: #333333;
+    --table-ho-background: #666666;
+    --table-ho-text: #ececec;
+    --table-transition-speed: 300ms;
+    --transition-speed: 600ms;
 }

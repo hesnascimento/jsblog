@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       confirmationDate: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       creationDate: {

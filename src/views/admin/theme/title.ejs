@@ -1,0 +1,10 @@
+<h1 class="title">
+    <%= title %> </br>
+    <small>
+        <%- breadcrumbs.map(val => `<a class="breadcrumb" href="${val.link}">${val.label}</a>`).join(' / '); %>
+    </small>
+    
+    <a href="<%= action.link %>" class="title-button">
+        <%= action.label %>
+    </a>
+</h1>

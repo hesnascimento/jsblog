@@ -1,8 +1,10 @@
 const i18n = require('../../i18n')
 const UserServices = require('../../services/Users')
-const indexLogin = (req, res) => {
+const index = (req, res) => {
   res.render('admin/login', {
-    errorMessage: ''
+    errorMessage: '',
+    email: '',
+    password: ''
   })
 }
 
@@ -11,16 +13,18 @@ const doLogin = async (req, res) => {
 
   try {
     const token = await UserServices.login(email, password)
-    res.cookie(_user, token, { httpOnly: true })
+    res.cookie('_user', token, { httpOnly: true })
     res.redirect('/admin')
   } catch (error) {
     res.render('admin/login', {
-      errorMessage: i18n('pt-br').translate(error.message)
+      errorMessage: i18n('pt-br').translate(error.message),
+      email,
+      password
     })
   }
 }
 
 module.exports = {
-  indexLogin,
+  index,
   doLogin
 }

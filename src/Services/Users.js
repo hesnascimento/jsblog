@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
+const { Op } = require('sequelize')
 
 const { Users } = require('../models')
 const ServiceError = require('./ServiceError')
@@ -13,6 +14,29 @@ const register = async user => {
 
   if (!UserHelpers.isUserValid(user))
     throw new ServiceError(400, 'Invalid user!')
+
+  try {
+    const dbUser = await Users.findOne({
+      where: {
+        email: user.email
+      }
+    })
+
+    if (dbUser)
+      throw new ServiceError(400, 'User already exists.')
+  } catch (error) {
+    console.error(
+      'REQUEST =>',
+      user,
+      'ERROR =>',
+      error)
+
+    if(error.code) {
+      throw error
+    }
+
+    throw new ServiceError(500, 'Internal server error.')
+  }
 
   const SALT = UserHelpers.generateRandomString(16)
 
@@ -41,6 +65,10 @@ const register = async user => {
       user,
       'ERROR =>',
       error)
+
+    if(error.code) {
+      throw error
+    }
 
     throw new ServiceError(500, 'Internal server error.')
   }
@@ -81,6 +109,10 @@ const confirmAccount = async code => {
       code,
       'ERROR =>',
       error)
+
+    if(error.code) {
+      throw error
+    }
 
     throw new ServiceError(500, 'Internal server error.')
   }
@@ -127,7 +159,7 @@ const login = async (email, password) => {
 
       toDb.passwordTries = user.passwordTries + 1
 
-      await Users.update({ id: user.id }, toDb)
+      await Users.update(toDb, { where: { id: user.id } })
 
       throw new ServiceError(401, 'Invalid password.')
     }
@@ -137,14 +169,17 @@ const login = async (email, password) => {
       lastLogin: new Date()
     }
 
-    await Users.update({ id: user.id }, toDb)
+    await Users.update(toDb, { where: { id: user.id } })
 
-    const privateKey = fs.readFileSync(`./keys/blog_rsa`)
+    const privateKey = fs.readFileSync('./keys/blog_rsa', { encoding: 'utf8' })
 
-    return jwt.sign({ id: user.id }, privateKey, {
+    const token = jwt.sign({ id: user.id }, privateKey, {
       algorithm: 'RS256',
-      expiresIn: '2h'
+      expiresIn: '2h',
+      encoding: 'utf8'
     })
+
+    return token
   } catch (error) {
     console.error(
       'REQUEST =>',
@@ -202,15 +237,52 @@ const sendRecovery = async email => {
 
   const recoveryCode = UserHelpers.generateRandomString(32)
 
-  await Users.update({ id: user.id }, {
-    recovery: recoveryCode,
-    recoveryTries: 0,
-    recoveryDate: new Date()
-  })
+  try {
+    await Users.update({
+      recovery: recoveryCode,
+      recoveryTries: 0,
+      recoveryDate: new Date()
+    }, {
+      where: { id: user.id }
+    })
+  } catch (error) {
+    console.error(
+      'REQUEST =>',
+      email,
+      'ERROR =>',
+      error)
 
+    throw new ServiceError(500, 'Internal server error.')
+  }
   // TODO: Send recovery mail
 
   return true
+}
+
+const listUsers = async (query = '') => {
+  const where = {
+    [Op.or] : [
+      { displayName: {
+        [Op.like]: `%${query}%`
+      }},
+      {email: {
+        [Op.like]: `%${query}%`
+      }}
+    ]
+  }
+
+  try {
+    const users = await Users.findAll({ where })
+    return users
+  } catch (error) {
+    console.error(
+      'REQUEST =>',
+      query,
+      'ERROR =>',
+      error)
+
+    throw new ServiceError(500, 'Internal server error.')
+  }
 }
 
 module.exports = {
@@ -218,5 +290,6 @@ module.exports = {
   confirmAccount,
   login,
   getUserByToken,
-  sendRecovery
+  sendRecovery,
+  listUsers
 }

@@ -3,7 +3,7 @@ const isUserValid = user => (
     && user.displayName
     && user.password
     && user.email
-    && user.password.lenght >= 6
+    && user.password.length >= 6
     && isEmailValid(user.email)
   )
 

@@ -8,12 +8,12 @@
         <div class="wrapper">
             <div class="login">
                 <div class="login-header">
-                    [ JSBlog ]
+                    LOGIN
                 </div>
                 <div class="login-form">
-                    <form action="" method="POST">
-                        <input type="email" placeholder="Email" name="email" id="email" class="input" />
-                        <input type="password" placeholder="Password" name="password" id="password" class="input" />
+                    <form action="" method="POST" autocomplete="off">
+                        <input type="email" placeholder="Email" name="email" id="email" class="input" value="<%=email%>" />
+                        <input type="password" placeholder="Password" name="password" id="password" class="input" value="<%=password%>" />
                         <a href="/admin/recovery" class="link">Forgot your passord?</a>
                         <button type="submit" class="button">
                             LOGIN

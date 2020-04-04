@@ -5,7 +5,7 @@ body {
     background-size: cover;
 }
 
-.login {
+.register {
     background-color: rgba(0, 0, 0, 0.7);
     width: 360px;
     padding: 40px 20px;
@@ -18,7 +18,13 @@ body {
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.3);
 }
 
-.login .login-header {
+.register.success {
+    width: 600px;
+    color: white;
+    font-weight: 200;
+}
+
+.register .register-header {
     color: white;
     font-weight: 100;
     letter-spacing: 5px;
@@ -28,18 +34,13 @@ body {
     text-align: center;
 }
 
-.login .login-form {
+.register .register-form {
     align-items: center;
     justify-content: center;
     align-content: center;
 }
 
-.login .login-form .input,
-.login .login-form .input:focus,
-.login .login-form .input:hover,
-.login .login-form .input:-webkit-autofill,
-.login .login-form .input:-webkit-autofill:hover,
-.login .login-form .input:-webkit-autofill:focus {
+.register .register-form .input {
     width: calc(100% - 40px);
     font-size: 16;
     letter-spacing: 1px;
@@ -47,29 +48,24 @@ body {
     border: none;
     border-bottom: solid #FFFFFF 1px;
     margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0) !important;
-    color: #FFFFFF !important;
+    background-color: rgba(0, 0, 0, 0);
+    color: #FFFFFF;
 }
 
-.login .login-form .input::placeholder {
+.register .register-form .input::placeholder {
     color: #FFFFFF;
     opacity: 1;
     font-size: 16;
     letter-spacing: 1px;
 }
 
-.login .login-form .button {
+.register .register-form .button {
     width: calc(100% - 20px);
     border: none;
     margin-left: 10px;
-    margin-top: 20px;
+    margin-top: 30px;
     height: 40px;
     background-color: #FFFFFF;
-}
-
-.login .login-form .link {
-    margin-top: 20px;
-    float: right;
 }
 
 .link {
@@ -78,15 +74,19 @@ body {
     font-weight: 800;
 }
 
-.login .login-footer {
+.register .register-footer {
     color: #cecece;
     font-weight: 200;
     margin-top: 20px;
 }
-.login .login-footer .login-error-message {
+.register .register-footer .register-error-message {
     text-align: center;
     background-color: tomato;
     color: white;
     padding: 10px 0;
     margin: 20px 0 20px 0;
+}
+
+.right {
+    float: right;
 }

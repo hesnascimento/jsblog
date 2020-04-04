@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <header>
+        <title>JSBlog - Register</title>
+        <link rel="stylesheet" href="/stylesheet/register.css" />
+    </header>
+    <body>
+        <div class="wrapper">
+            <div class="register">
+                <div class="register-header">
+                    REGISTER
+                </div>
+                <div class="register-form">
+                    <form action="" method="POST" autocomplete="off">
+                        <input type="text" placeholder="Display Name" name="displayName" id="displayName" class="input" />
+                        <input type="email" placeholder="Email" name="email" id="email" class="input" />
+                        <input type="password" placeholder="Password" name="password" id="password" class="input" />
+                        <button type="submit" class="button">
+                            REGISTER
+                        </button>
+                    </form>
+                </div>
+                <div class="register-footer">
+                    <% if(errorMessage) {%>
+                    <div class="register-error-message">
+                        <%= errorMessage _%>
+                    </div>
+                    <%}%>
+                    Already have an account? <a href="/admin/login" class="link">Login.</a> 
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

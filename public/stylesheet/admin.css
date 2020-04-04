@@ -1,0 +1,61 @@
+@import url('/stylesheet/global.css');
+@import url('/stylesheet/_sidemenu.css');
+@import url('/stylesheet/_title.css');
+
+body {
+    color: var(--text-secondary);
+    background-color: var(--bg-default);
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    margin: 0 0 0 16rem;
+}
+
+.data-table {
+    width: calc(100% - 10rem);
+    margin:  2rem 5rem;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background-color: var(--table-header);
+    color: var(--table-header-text);
+    height: 3rem;
+    font-weight: 400;
+}
+
+.data-table td {
+    text-align: center;
+    height: 5rem;
+    font-weight: 200;
+}
+
+.data-table tr {
+    transition: var(--table-transition-speed);
+}
+
+.data-table tr:nth-child(even) {
+    background-color: var(--table-stripes);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--table-ho-background);
+    color: var(--table-ho-text);
+}
+
+.data-table .action {
+    text-decoration: none;
+    color: var(--text-secondary);
+}
+
+.data-table .action:hover {
+    color: var(--detail-primary);
+}
+
+.data-table .user-image {
+    height: 3rem;
+    border-radius: 2rem;
+    border: solid 1px var(--text-secondary);
+}
